@@ -2,73 +2,70 @@ import React, { useState } from "react";
 import { addTaskToFirestore } from "../services/taskService";
 import toast from "react-hot-toast";
 
-const AddTaskComponent = () => {
-  const [taskTitle, setTaskTitle] = useState("");
-  const [taskDesc, setTaskDesc] = useState("");
-  const [loading, setLoading] = useState(false);
+const AddTaskComponent = ({ onTaskAdded }) => {
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
 
-  const handleAddTask = async (e) => {
-    e.preventDefault();
-    if (!taskTitle.trim() || !taskDesc.trim()) {
-      toast.error("Task title and description cannot be empty!");
+  const handleAddTask = async () => {
+    if (!title.trim() || !description.trim()) {
+      toast.error("Please fill in both fields.");
       return;
     }
 
-    setLoading(true);
-
     try {
-      const newTask = {
-        title: taskTitle,
-        description: taskDesc,
-        createdAt: new Date().toISOString(),
-      };
-
-      await addTaskToFirestore(newTask);
-
-      setTaskTitle("");
-      setTaskDesc("");
+      await addTaskToFirestore({ title, description });
       toast.success("Task added successfully!");
-    } catch (err) {
-      toast.error("Failed to add task. Please try again.");
-    } finally {
-      setLoading(false);
+      setTitle("");
+      setDescription("");
+      onTaskAdded(); // Notify parent to refresh tasks
+    } catch (error) {
+      toast.error("Failed to add task.");
     }
   };
 
   return (
-    <>
-      <div className="flex flex-1/4 flex-col gap-2 bg-green-100 rounded-md p-4">
-        <h1 className="text-green-900 font-semibold text-lg">Add Your Task</h1>
-        <form onSubmit={handleAddTask} className="flex flex-col gap-3">
+    <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg w-full transition duration-300">
+      <h2 className="text-xl font-bold text-green-800 dark:text-green-200 mb-4">
+        Add New Task
+      </h2>
+
+      <div className="space-y-4">
+        {/* Title Input */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">
+            Task Title
+          </label>
           <input
             type="text"
-            id="taskTitle"
-            placeholder="Task Title..."
-            value={taskTitle}
-            onChange={(e) => setTaskTitle(e.target.value)}
-            className="p-3 w-full text-white rounded-md border-gray-100 bg-green-800 shadow-xs text-sm placeholder:text-gray-300"
+            className="input input-bordered w-full bg-white dark:bg-gray-900 border-gray-300 dark:border-gray-700 text-gray-800 dark:text-white"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            placeholder="e.g., Submit report"
           />
+        </div>
 
+        {/* Description Input */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">
+            Description
+          </label>
           <textarea
-            id="taskDesc"
-            cols="30"
-            rows="12"
-            value={taskDesc}
-            onChange={(e) => setTaskDesc(e.target.value)}
-            className="p-3 rounded-md text-sm w-full text-white border-gray-100 bg-green-800 placeholder:text-gray-300 resize-none"
-            placeholder="Write your task here..."
+            className="textarea textarea-bordered w-full bg-white dark:bg-gray-900 border-gray-300 dark:border-gray-700 text-gray-800 dark:text-white"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            placeholder="Details about the task..."
           ></textarea>
+        </div>
 
-          <button
-            type="submit"
-            disabled={loading}
-            className="btn w-full px-4 py-2 text-sm text-white rounded-md bg-green-600 hover:bg-green-800 transition ease-in-out"
-          >
-            {loading ? "Saving..." : "Save"}
-          </button>
-        </form>
+        {/* Submit Button */}
+        <button
+          onClick={handleAddTask}
+          className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-md transition duration-300"
+        >
+          Add Task
+        </button>
       </div>
-    </>
+    </div>
   );
 };
 
