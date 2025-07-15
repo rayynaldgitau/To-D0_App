@@ -35,8 +35,11 @@ const HomePage = ({ theme, setTheme }) => {
 
         {/* My Tasks */}
         <div className="w-full md:w-2/3 bg-green-100 dark:bg-green-900 rounded-xl p-4 shadow-md overflow-auto">
-          <h1 className="text-green-900 dark:text-green-100 font-bold text-xl sm:text-2xl mb-4">My Tasks</h1>
-          <MyTaskComponent tasks={tasks} loading={loading} onTaskUpdated={fetchTasks} />
+          <h1 className="text-green-900 dark:text-green-100 font-bold text-xl sm:text-2xl mb-4">
+            My Tasks
+          </h1>
+          <MyTaskComponent tasks={tasks} loading={loading} onTaskUpdated={fetchTasks} />{" "}
+          {/* Make sure MyTaskComponent handles crossing, greying, sorting, user, and time */}
         </div>
       </div>
     </div>
