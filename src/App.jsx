@@ -2,11 +2,14 @@ import { Routes, Route } from "react-router";
 import { Navigate } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 import HomePage from "./pages/HomePage";
+import { useState } from "react";
 import LoginPage from "./pages/LoginPage";
 import { getCurrentUser } from "./services/authService";
 
 function App() {
-  const PrivateRoute = ({ children }) => {
+    const [theme, setTheme] = useState(localStorage.getItem('theme') || 'light');
+
+    const PrivateRoute = ({ children }) => {
     return getCurrentUser() ? children : <Navigate to="/signin" />;
   };
 
@@ -14,7 +17,17 @@ function App() {
     <>
       <Toaster />
       <Routes>
-        <Route
+          <Route
+              path="/"
+              element={
+                  <PrivateRoute>
+                      <HomePage theme={theme} setTheme={setTheme} />
+                  </PrivateRoute>
+              }
+          />
+        
+
+        {/* <Route
           path="/"
           element={
             <PrivateRoute>
@@ -22,9 +35,10 @@ function App() {
             </PrivateRoute>
           }
         />
+        */}
         <Route path="/signin" element={<LoginPage />} />
 
-        {/* prevent user after login */}
+        {/* Prevent user after login */}
         <Route path="*" element={<Navigate to="/signin" />} />
       </Routes>
     </>

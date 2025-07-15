@@ -4,7 +4,7 @@ import AddTaskComponent from "../components/AddTaskComponent";
 import NavbarComponent from "../components/NavbarComponent";
 import { getAllTasks } from "../services/taskService";
 
-const HomePage = () => {
+const HomePage = ({ theme, setTheme }) => {
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -24,8 +24,8 @@ const HomePage = () => {
   }, []);
 
   return (
-    <div className="min-h-screen flex flex-col bg-white dark:bg-gray-900">
-      <NavbarComponent />
+    <div className={`min-h-screen flex flex-col ${theme === 'dark' ? 'bg-gray-900' : 'bg-white'}`}>
+      <NavbarComponent theme={theme} setTheme={setTheme} />
 
       <div className="flex flex-col md:flex-row gap-6 px-4 sm:px-6 lg:px-12 xl:px-20 py-6 w-full max-w-[1600px] mx-auto">
         {/* Add Task */}
@@ -44,7 +44,3 @@ const HomePage = () => {
 };
 
 export default HomePage;
-
-
-
-
