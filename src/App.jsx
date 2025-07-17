@@ -5,6 +5,8 @@ import HomePage from "./pages/HomePage";
 import { useState } from "react";
 import LoginPage from "./pages/LoginPage";
 import { getCurrentUser } from "./services/authService";
+import SignUpPage from "./pages/SignUpPage";
+
 
 function App() {
     const [theme, setTheme] = useState(localStorage.getItem('theme') || 'light');
@@ -25,19 +27,9 @@ function App() {
                   </PrivateRoute>
               }
           />
-        
-
-        {/* <Route
-          path="/"
-          element={
-            <PrivateRoute>
-              <HomePage />
-            </PrivateRoute>
-          }
-        />
-        */}
-        <Route path="/signin" element={<LoginPage />} />
-
+          <Route path="/signup" element={<SignUpPage />} />
+          <Route path="/signin" element={<LoginPage />} />
+          
         {/* Prevent user after login */}
         <Route path="*" element={<Navigate to="/signin" />} />
       </Routes>
