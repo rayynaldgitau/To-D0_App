@@ -106,7 +106,7 @@ const NavbarComponent = ({ theme, setTheme }) => {
         onClick={toggleTheme}
         className="flex items-center gap-2 text-sm hover:text-yellow-500 transition"
       >
-        {theme === "dark" ? (
+        {theme === "light" ? (
           <>
             <FaSun className="text-yellow-400" />
             Light Mode
